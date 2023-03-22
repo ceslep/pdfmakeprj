@@ -55,28 +55,22 @@
   };
 
   let DIV;
-  const imprimirImagen = () => {
-    // Obtener el contenido HTML del elemento div
-    var htmlContent = DIV.innerHTML;
-
+  
+  const imprimirImagen = async () => {
     // Convertir el contenido HTML a una imagen utilizando html-to-image
-    htmlToImage
-      .toPng(DIV,{quality:1})
-      .then(function (dataUrl) {
-        // Crear el objeto de imagen pdfmake utilizando la imagen convertida
-        var image = { image: dataUrl, fit: [500, 500] };
-
-        // Crear el documento pdfmake con la imagen
-        var docDefinition = {
-          content: [image],
-        };
-
-        // Generar el archivo PDF y descargarlo en el navegador
-        pdfMake.createPdf(docDefinition).open();
-      })
-      .catch(function (error) {
-        console.error("Error al convertir el contenido HTML a imagen: ", error);
-      });
+    try {
+      let dataUrl = await htmlToImage.toPng(DIV, { quality: 1 });
+      // Crear el objeto de imagen pdfmake utilizando la imagen convertida
+      let image = { image: dataUrl, fit: [500, 500] };
+      // Crear el documento pdfmake con la imagen
+      let docDefinition = {
+        content: [image],
+      };
+      // Generar el archivo PDF y descargarlo en el navegador
+      pdfMake.createPdf(docDefinition).open();
+    } catch (error) {
+      console.error("Error al convertir el contenido HTML a imagen: ", error);
+    }
   };
 </script>
 
