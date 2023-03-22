@@ -3,9 +3,17 @@
   import * as pdfFonts from "pdfmake/build/vfs_fonts";
   (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
   import * as htmlToImage from "html-to-image";
-  import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
   import { _docDefinition } from "./DocDefincitionsTablesExample.svelte";
   import { _docDefinitionImages } from "./DocDefinitionsImages.svelte";
+  import { onMount } from "svelte";
+
+
+  let posts=[];
+
+  onMount(async ()=>{
+    let response=await fetch('https://jsonplaceholder.typicode.com/posts');
+    posts=await response.json();
+  })
   const docDefinition = {
     compress: false,
     content: [
@@ -23,7 +31,7 @@
       },
       "The following table has nothing more than a body array",
       {
-        style: "tableExample",
+       
         // layout: 'headerLineOnly',
         headerRows: 1,
 
@@ -97,6 +105,24 @@
   const Imagenes = () => {
     pdfMake.createPdf(_docDefinitionImages).open();
   };
+
+  const ImprimirPosts=()=>{
+    let body=posts.map(post=>{
+         return Object.values(post)
+    });
+   
+    let dd={
+      content:[
+        {
+          table:{
+            width: "100%",
+            body
+          }
+        }
+      ]
+    };
+    pdfMake.createPdf(dd).download();
+  }
 </script>
 
 <button class="btn btn-primary rounded-0" on:keydown={null} on:click={printer}
@@ -124,6 +150,10 @@
   >Imagenes</button
 >
 
+<button class="btn btn-warning rounded-0" on:keydown={null} on:click={ImprimirPosts}
+  >Imprimir Posts</button
+>
+
 <div bind:this={DIV}>
   <div class="text-center">
     <img
@@ -132,13 +162,7 @@
       class="img-fluid"
     />
   </div>
-  <ul class="fs-3">
-    {#each [0, 1, 2, 3, 4] as item}
-      <li class="text-danger">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error ipsa,
-        cum ex, repudiandae dolores eius in, consequatur aperiam quo enim illum
-        libero! Laborum voluptate impedit odio molestias veritatis quae tempore.
-      </li>
-    {/each}
-  </ul>
+  {#each posts as post}
+     {JSON.stringify(post)}
+  {/each}
 </div>
