@@ -72,6 +72,15 @@
       console.error("Error al convertir el contenido HTML a imagen: ", error);
     }
   };
+
+  const qrGenerator=()=>{
+    let docDefinition={
+      content:[
+        { qr: 'Cesar Leandro Patino Velez', foreground: 'black', background: 'yellow' }
+      ]
+    }
+    pdfMake.createPdf(docDefinition).open();
+  }
 </script>
 
 <button class="btn btn-primary" on:keydown={null} on:click={printer}
@@ -80,6 +89,8 @@
 <button class="btn btn-success" on:keydown={null} on:click={imprimirImagen}>
   Imagen
 </button>
+
+<button class="btn btn-warning" on:keydown={null} on:click={qrGenerator}>Qr</button>
 
 <div bind:this={DIV}>
   <div class="text-center">
