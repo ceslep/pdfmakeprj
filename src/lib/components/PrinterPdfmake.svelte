@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as pdfMake from "pdfmake/build/pdfmake";
   import * as pdfFonts from "pdfmake/build/vfs_fonts";
-  (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
   import * as htmlToImage from "html-to-image";
   import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
   import { _docDefinition } from "./DocDefincitionsTablesExample.svelte";
